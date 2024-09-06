@@ -11,26 +11,29 @@ class TaskController extends Controller
     // Display a list of the user's tasks
     public function index(Request $request)
     {
-        // Get the current user
         $user = Auth::user();
 
-        // Query tasks for the current user
         $tasks = $user->tasks();
 
-        // Filter by priority if provided
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $tasks->where(function($query) use ($request) {
+                $query->where('title', 'like', '%' . $request->search . '%')
+                    ->orWhere('description', 'like', '%' . $request->search . '%')
+                    ->orWhere('category', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Existing filters
         if ($request->has('priority') && $request->priority !== 'All') {
             $tasks->where('priority', $request->priority);
         }
-
-        // Filter by due date range if provided
         if ($request->has('due_date') && $request->due_date !== null) {
             $tasks->where('due_date', '<=', $request->due_date);
         }
 
-        // Execute query and get the tasks
         $tasks = $tasks->get();
 
-        // Return the view with the tasks
         return view('tasks.index', compact('tasks'));
     }
 
@@ -48,6 +51,7 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
             'priority' => 'required|in:Low,Medium,High',
+            'category' => 'nullable|string',
         ]);
 
         Task::create([
@@ -56,6 +60,7 @@ class TaskController extends Controller
             'description' => $request->description,
             'due_date' => $request->due_date,
             'priority' => $request->priority,
+            'category' => $request->category,
         ]);
 
         return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
@@ -84,9 +89,10 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
             'priority' => 'required|in:Low,Medium,High',
+            'category' => 'nullable|string',
         ]);
 
-        $task->update($request->only(['title', 'description', 'due_date', 'priority']));
+        $task->update($request->only(['title', 'description', 'due_date', 'priority', 'category']));
 
         return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
     }
