@@ -9,6 +9,8 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
+        <a href="{{ route('tasks.create') }}" class="btn btn-primary">Create Task</a>
+
         <!-- Search and Filter Form -->
         <form action="{{ route('tasks.index') }}" method="GET" class="mb-4">
             <div class="form-row">
