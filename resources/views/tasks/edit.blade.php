@@ -16,6 +16,10 @@
                 <textarea name="description" class="form-control">{{ $task->description }}</textarea>
             </div>
             <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" name="category" class="form-control" value="{{ $task->category }}">
+            </div>
+            <div class="form-group">
                 <label for="due_date">Due Date</label>
                 <input type="date" name="due_date" class="form-control" value="{{ $task->due_date }}">
             </div>

@@ -9,9 +9,14 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <!-- Task Filtering Form -->
+        <!-- Search and Filter Form -->
         <form action="{{ route('tasks.index') }}" method="GET" class="mb-4">
             <div class="form-row">
+                <!-- Search Input -->
+                <div class="col">
+                    <input type="text" name="search" class="form-control" placeholder="Search tasks..." value="{{ request('search') }}">
+                </div>
+
                 <!-- Priority Filter -->
                 <div class="col">
                     <select name="priority" class="form-control">
@@ -43,6 +48,7 @@
                     <th>Description</th>
                     <th>Due Date</th>
                     <th>Priority</th>
+                    <th>Category</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -53,6 +59,7 @@
                         <td>{{ $task->description }}</td>
                         <td>{{ $task->due_date }}</td>
                         <td>{{ $task->priority }}</td>
+                        <td>{{ $task->category }}</td>
                         <td>
                             <a href="{{ route('tasks.edit', $task) }}" class="btn btn-warning">Edit</a>
                             <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="display:inline;">
