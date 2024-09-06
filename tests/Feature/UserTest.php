@@ -27,12 +27,23 @@ class UserTest extends TestCase
     /** @test */
     public function a_user_can_login()
     {
+        // Re-seed the database to ensure users are present
+        $this->seed();
+
+        // Retrieve the first user
         $user = User::first();
+        if (!$user) {
+            $this->fail('No users found in the database.');
+        }
+
+        // Attempt to log in with the user's credentials
         $response = $this->post('/login', [
             'email' => $user->email,
             'password' => 'password123',
         ]);
 
+        // Assert that the user is redirected to the tasks page
         $response->assertRedirect('/tasks');
     }
+
 }
