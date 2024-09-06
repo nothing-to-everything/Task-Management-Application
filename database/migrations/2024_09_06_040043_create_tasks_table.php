@@ -9,20 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('user_id'); // User who owns the task
             $table->string('title');
             $table->text('description')->nullable();
-            $table->date('due_date');
-            $table->enum('priority', ['Low', 'Medium', 'High']);
-            $table->string('category')->nullable();
-            $table->boolean('is_completed')->default(false);
+            $table->date('due_date')->nullable();
+            $table->enum('priority', ['Low', 'Medium', 'High'])->default('Low');
             $table->timestamps();
+
+            // Foreign key constraint linking task to a user
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.
