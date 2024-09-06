@@ -3,6 +3,10 @@
 @section('content')
     <div class="container my-5">
         <h2 class="text-light text-center mb-5">Task Dashboard</h2>
+        <form action="{{ route('logout') }}" method="POST" class="d-inline-block ml-3">
+            @csrf
+            <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+        </form>
 
         <div class="row text-light">
             <!-- Total Tasks -->

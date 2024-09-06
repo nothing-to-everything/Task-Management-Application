@@ -7,10 +7,6 @@
             <h2 class="text-light">Your Tasks</h2>
             <div>
                 <a href="{{ route('tasks.create') }}" class="btn btn-gradient">+ Create Task</a>
-                <form action="{{ route('logout') }}" method="POST" class="d-inline-block ml-3">
-                    @csrf
-                    <button type="submit" class="btn btn-danger btn-sm">Logout</button>
-                </form>
             </div>
         </div>
 
@@ -57,7 +53,7 @@
         @if(isset($tasks) && $tasks->count() > 0)
             <div class="card bg-dark text-light border-0 shadow-lg">
                 <div class="card-body p-0">
-                    <table class="table table-dark table-striped table-hover mb-0">
+                    <table class="table table-dark table-striped mb-0">
                         <thead class="thead-dark">
                         <tr>
                             <th>Title</th>
@@ -78,11 +74,10 @@
                                 <td>{{ $task->priority }}</td>
                                 <td>{{ $task->category }}</td>
                                 <td>
-                                    <form action="{{ route('tasks.update', $task) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="checkbox" name="completed" onchange="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
-                                    </form>
+                                    <label class="switch">
+                                        <input type="checkbox" class="task-completed" data-task-id="{{ $task->id }}" {{ $task->completed ? 'checked' : '' }}>
+                                        <span class="slider round"></span>
+                                    </label>
                                 </td>
                                 <td>
                                     <a href="{{ route('tasks.edit', $task) }}" class="btn btn-warning btn-sm">Edit</a>
@@ -102,4 +97,43 @@
             <p class="text-center text-light">No tasks available. <a href="{{ route('tasks.create') }}" class="text-info">Create a task</a></p>
         @endif
     </div>
+
+    <!-- JavaScript for AJAX -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const switchElements = document.querySelectorAll('.task-completed');
+
+            switchElements.forEach(switchElement => {
+                switchElement.addEventListener('change', function() {
+                    const taskId = this.getAttribute('data-task-id');
+                    const completed = this.checked;
+
+                    fetch(`/tasks/${taskId}/update-status`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ completed })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log('Task status updated successfully');
+                            } else {
+                                console.error('Error updating task status');
+                                this.checked = !completed; // Revert the switch if the update failed
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            this.checked = !completed; // Revert the switch if the update failed
+                        });
+                });
+            });
+        });
+    </script>
+
+    <!-- Meta tag for CSRF token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
