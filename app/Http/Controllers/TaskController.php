@@ -149,5 +149,13 @@ class TaskController extends Controller
 
         return view('dashboard', compact('totalTasks', 'completedTasks', 'overdueTasks', 'tasksByPriority', 'completionPercentage'));
     }
+
+    public function updateStatus(Request $request, Task $task)
+    {
+        $task->completed = $request->input('completed');
+        $task->save();
+
+        return response()->json(['success' => true]);
+    }
 }
 
