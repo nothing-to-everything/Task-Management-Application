@@ -73,40 +73,4 @@
             @endforeach
         </div>
     </div>
-
-    <!-- Additional Styling for Hover Effects -->
-    <style>
-        .hover-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .hover-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        .bg-gradient-dark {
-            background: linear-gradient(135deg, #1f1f1f, #292929);
-        }
-        .bg-gradient-success {
-            background: linear-gradient(135deg, #28a745, #218838);
-        }
-        .bg-gradient-danger {
-            background: linear-gradient(135deg, #dc3545, #c82333);
-        }
-        .bg-gradient-primary {
-            background: linear-gradient(135deg, #007bff, #0056b3);
-        }
-        .bg-gradient-secondary {
-            background: linear-gradient(135deg, #6c757d, #5a6268);
-        }
-        .text-light {
-            color: #f8f9fa !important;
-        }
-        .text-light a {
-            color: #f8f9fa !important;
-        }
-        .text-light a:hover {
-            color: #e9ecef !important;
-            text-decoration: none;
-        }
-    </style>
 @endsection
