@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,4 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('tasks', TaskController::class);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
+
+// Task routes
+Route::resource('tasks', TaskController::class)->middleware('auth');
+
 
