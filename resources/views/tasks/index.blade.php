@@ -49,6 +49,7 @@
                     <th>Due Date</th>
                     <th>Priority</th>
                     <th>Category</th>
+                    <th>Completed</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -60,6 +61,13 @@
                         <td>{{ $task->due_date }}</td>
                         <td>{{ $task->priority }}</td>
                         <td>{{ $task->category }}</td>
+                        <td>
+                            <form action="{{ route('tasks.update', $task) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('PUT')
+                                <input type="checkbox" name="completed" onchange="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
+                            </form>
+                        </td>
                         <td>
                             <a href="{{ route('tasks.edit', $task) }}" class="btn btn-warning">Edit</a>
                             <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="display:inline;">
