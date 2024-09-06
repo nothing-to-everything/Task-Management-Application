@@ -9,9 +9,28 @@ use Illuminate\Support\Facades\Auth;
 class TaskController extends Controller
 {
     // Display a list of the user's tasks
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Auth::user()->tasks; // Get tasks belonging to the authenticated user
+        // Get the current user
+        $user = Auth::user();
+
+        // Query tasks for the current user
+        $tasks = $user->tasks();
+
+        // Filter by priority if provided
+        if ($request->has('priority') && $request->priority !== 'All') {
+            $tasks->where('priority', $request->priority);
+        }
+
+        // Filter by due date range if provided
+        if ($request->has('due_date') && $request->due_date !== null) {
+            $tasks->where('due_date', '<=', $request->due_date);
+        }
+
+        // Execute query and get the tasks
+        $tasks = $tasks->get();
+
+        // Return the view with the tasks
         return view('tasks.index', compact('tasks'));
     }
 

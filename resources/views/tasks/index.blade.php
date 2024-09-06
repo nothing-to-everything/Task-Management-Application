@@ -4,12 +4,37 @@
     <div class="container">
         <h2>Your Tasks</h2>
 
+        <!-- Flash message for success -->
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <a href="{{ route('tasks.create') }}" class="btn btn-primary mb-3">Create New Task</a>
+        <!-- Task Filtering Form -->
+        <form action="{{ route('tasks.index') }}" method="GET" class="mb-4">
+            <div class="form-row">
+                <!-- Priority Filter -->
+                <div class="col">
+                    <select name="priority" class="form-control">
+                        <option value="All" {{ request('priority') == 'All' ? 'selected' : '' }}>All Priorities</option>
+                        <option value="Low" {{ request('priority') == 'Low' ? 'selected' : '' }}>Low</option>
+                        <option value="Medium" {{ request('priority') == 'Medium' ? 'selected' : '' }}>Medium</option>
+                        <option value="High" {{ request('priority') == 'High' ? 'selected' : '' }}>High</option>
+                    </select>
+                </div>
 
+                <!-- Due Date Filter -->
+                <div class="col">
+                    <input type="date" name="due_date" class="form-control" value="{{ request('due_date') }}">
+                </div>
+
+                <!-- Filter Button -->
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Task List -->
         @if($tasks->count() > 0)
             <table class="table">
                 <thead>
