@@ -150,8 +150,13 @@ class TaskController extends Controller
         return view('dashboard', compact('totalTasks', 'completedTasks', 'overdueTasks', 'tasksByPriority', 'completionPercentage'));
     }
 
-    public function updateStatus(Request $request, Task $task)
+    public function updateStatus(Request $request, $id)
     {
+        $task = Task::find($id);
+        if (!$task) {
+            return response()->json(['success' => false, 'message' => 'Task not found'], 404);
+        }
+
         $task->completed = $request->input('completed');
         $task->save();
 

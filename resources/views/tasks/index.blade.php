@@ -124,21 +124,20 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                console.log('Task status updated successfully');
+                                location.reload(); // Reload the page on successful update
                             } else {
-                                console.error('Error updating task status');
-                                this.checked = !completed; // Revert the switch if the update failed
+                                console.error('Error updating task status:', data.message);
+                                this.checked = !completed; // Revert the switch on error
                             }
                         })
                         .catch(error => {
-                            console.error('Error:', error);
-                            this.checked = !completed; // Revert the switch if the update failed
+                            console.error('Fetch error:', error);
+                            this.checked = !completed; // Revert the switch on fetch error
+                            location.reload(); // Reload the page on fetch error
                         });
                 });
             });
         });
     </script>
 
-    <!-- Meta tag for CSRF token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
