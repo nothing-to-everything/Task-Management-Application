@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Login')
+
 @section('content')
     <div class="container">
         <h2>Login</h2>
@@ -7,7 +9,7 @@
             @csrf
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
+                <input type="email" class="form-control" id="email" name="email" required>
                 @error('email')
                 <span class="text-danger">{{ $message }}</span>
                 @enderror
