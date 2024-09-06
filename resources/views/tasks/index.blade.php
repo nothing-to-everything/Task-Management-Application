@@ -75,7 +75,7 @@
                             <tr>
                                 <td>{{ $task->title }}</td>
                                 <td>{{ $task->description }}</td>
-                                <td>{{ $task->due_date }}</td>
+                                <td>{{ $task->formatted_due_date }}</td>
                                 <td>{{ $task->priority }}</td>
                                 <td>{{ $task->category }}</td>
                                 <td>
