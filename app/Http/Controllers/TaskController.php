@@ -12,27 +12,19 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-
-        $tasks = $user->tasks();
-
-        // Search functionality
-        if ($request->has('search') && !empty($request->search)) {
-            $tasks->where(function($query) use ($request) {
-                $query->where('title', 'like', '%' . $request->search . '%')
-                    ->orWhere('description', 'like', '%' . $request->search . '%')
-                    ->orWhere('category', 'like', '%' . $request->search . '%');
-            });
-        }
-
-        // Existing filters
-        if ($request->has('priority') && $request->priority !== 'All') {
-            $tasks->where('priority', $request->priority);
-        }
-        if ($request->has('due_date') && $request->due_date !== null) {
-            $tasks->where('due_date', '<=', $request->due_date);
-        }
-
-        $tasks = $tasks->get();
+        $tasks = $user->tasks()
+            ->when($request->input('search'), function($query, $search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('category', 'like', "%{$search}%");
+            })
+            ->when($request->input('priority') !== 'All', function($query) use ($request) {
+                $query->where('priority', $request->input('priority'));
+            })
+            ->when($request->input('due_date'), function($query) use ($request) {
+                $query->whereDate('due_date', $request->input('due_date'));
+            })
+            ->get();
 
         return view('tasks.index', compact('tasks'));
     }
