@@ -32,11 +32,9 @@ Route::middleware('auth')->group(function () {
 });
 
 // Task routes
-Route::resource('tasks', TaskController::class)->middleware('auth');
-
-
-// Dashboard routes
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::middleware('auth')->group(function () {
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+    Route::get('/dashboard', [TaskController::class, 'dashboard'])->name('dashboard');
+});
 
 

@@ -5,29 +5,47 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
     // Display a list of the user's tasks
     public function index(Request $request)
     {
-        $user = Auth::user();
-        $tasks = $user->tasks()
-            ->when($request->input('search'), function($query, $search) {
-                $query->where('title', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%")
-                    ->orWhere('category', 'like', "%{$search}%");
-            })
-            ->when($request->input('priority') !== 'All', function($query) use ($request) {
-                $query->where('priority', $request->input('priority'));
-            })
-            ->when($request->input('due_date'), function($query) use ($request) {
-                $query->whereDate('due_date', $request->input('due_date'));
-            })
-            ->get();
+        $query = Task::where('user_id', auth()->id()); // Filter tasks by the authenticated user
+
+        // Apply search filter
+        if ($request->has('search') && !empty($request->search)) {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                    ->orWhere('description', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Apply priority filter
+        if ($request->has('priority') && $request->priority != 'All') {
+            $query->where('priority', $request->priority);
+        }
+
+        // Apply due date filter
+        if ($request->has('due_date') && !empty($request->due_date)) {
+            $query->whereDate('due_date', $request->due_date);
+        }
+
+        if ($request->has('status')) {
+            if ($request->status === 'completed') {
+                $query->where('completed', true);
+            } elseif ($request->status === 'overdue') {
+                $query->whereDate('due_date', '<', now()->toDateString())->where('completed', false);
+            }
+        }
+
+        // Get filtered tasks
+        $tasks = $query->get();
 
         return view('tasks.index', compact('tasks'));
     }
+
 
     // Show form to create a new task
     public function create()
@@ -99,6 +117,37 @@ class TaskController extends Controller
         $task->delete();
 
         return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
+    }
+
+    public function dashboard()
+    {
+        // Filter tasks for the logged-in user
+        $userId = auth()->id();
+
+        // Total number of tasks for the user
+        $totalTasks = Task::where('user_id', $userId)->count();
+
+        // Completed tasks for the user
+        $completedTasks = Task::where('user_id', $userId)
+            ->where('completed', true)
+            ->count();
+
+        // Overdue tasks for the user
+        $overdueTasks = Task::where('user_id', $userId)
+            ->where('completed', false)
+            ->where('due_date', '<', now())
+            ->count();
+
+        // Tasks by priority for the user
+        $tasksByPriority = Task::select('priority', DB::raw('count(*) as count'))
+            ->where('user_id', $userId)
+            ->groupBy('priority')
+            ->get();
+
+        // Completion percentage
+        $completionPercentage = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
+
+        return view('dashboard', compact('totalTasks', 'completedTasks', 'overdueTasks', 'tasksByPriority', 'completionPercentage'));
     }
 }
 

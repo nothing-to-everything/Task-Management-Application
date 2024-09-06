@@ -57,7 +57,7 @@
         @if(isset($tasks) && $tasks->count() > 0)
             <div class="card bg-dark text-light border-0 shadow-lg">
                 <div class="card-body p-0">
-                    <table class="table table-dark table-striped mb-0">
+                    <table class="table table-dark table-striped table-hover mb-0">
                         <thead class="thead-dark">
                         <tr>
                             <th>Title</th>

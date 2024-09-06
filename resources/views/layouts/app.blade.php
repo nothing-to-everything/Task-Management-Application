@@ -47,6 +47,33 @@
         .animate__fadeIn {
             animation-duration: 1s;
         }
+        /* Custom button styles */
+        .btn-gradient {
+            background: linear-gradient(45deg, #007bff, #00d4ff);
+            color: white;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            background: linear-gradient(45deg, #0056b3, #00a2cc); /* Darker shade on hover */
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #b02a37; /* Darker red for danger button on hover */
+        }
+
+        /* Adjustments for button hover */
+        .btn-warning:hover {
+            background-color: #ffca2b; /* A brighter yellow for edit button */
+            color: white;
+        }
+
+        /* Make sure table looks more appealing */
+        .table-hover tbody tr:hover {
+            background-color: #2c2c2c;
+        }
     </style>
     @yield('styles')
 </head>
