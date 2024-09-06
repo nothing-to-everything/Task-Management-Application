@@ -10,7 +10,7 @@ class Task extends Model
     use HasFactory;
 
     // Allow mass assignment on these fields
-    protected $fillable = ['user_id', 'title', 'description', 'due_date', 'priority'];
+    protected $fillable = ['user_id', 'title', 'description', 'due_date', 'priority', 'category'];
 
     // Define relationship: Task belongs to a User
     public function user()
