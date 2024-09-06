@@ -43,7 +43,7 @@ class UserTest extends TestCase
         ]);
 
         // Assert that the user is redirected to the tasks page
-        $response->assertRedirect('/tasks');
+        $response->assertRedirect('/dashboard');
     }
 
 }
