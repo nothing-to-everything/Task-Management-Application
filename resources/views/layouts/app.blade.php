@@ -133,6 +133,27 @@
     @yield('styles')
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ route('dashboard') }}">Task Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+
+            </li>
+            <li class="nav-item">
+
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button class="btn btn-danger my-2 my-sm-0" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+
 @yield('content')
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
