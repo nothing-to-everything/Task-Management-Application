@@ -25,7 +25,8 @@ class LoginController extends Controller
 
         // Attempt to log the user in
         if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->route('tasks.index')->with('success', 'Logged in successfully.');
+            // Redirect to the dashboard on successful login
+            return redirect()->route('dashboard')->with('success', 'Logged in successfully.');
         }
 
         // If login fails, redirect back with an error message
