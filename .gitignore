@@ -2,7 +2,7 @@
 node_modules/
 npm-debug.log
 yarn-error.log
-.env
+/.env
 .DS_Store
 /public/storage
 /storage/*.key
@@ -16,9 +16,5 @@ composer.phar
 .vscode/
 .phpunit.result.cache
 *.phpunit.result.cache
-.env.*
-.env.local
-.env.development
-.env.production
-.env.testing
-.env.backup
+/.env.testing
+
