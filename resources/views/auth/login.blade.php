@@ -10,6 +10,13 @@
             </div>
 
             <div class="card-body p-5">
+                {{-- Flash message --}}
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show animate__animated animate__fadeIn" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
                 <form action="{{ route('login') }}" method="POST">
                     @csrf
                     <div class="form-group mb-4">
